@@ -109,9 +109,12 @@ export default function App() {
 
   const deleteArticle = article_id => {
     // ✨ implement
-    if (!localStorage.getItem('token')) {
-      return <Navigate to="/" />
-    }
+    axiosWithAuth().delete(`${articlesUrl}/${article_id}`)
+      .then(res => {
+        setArticles(articles.filter(art => (art.article_id !== article_id)))
+        setMessage(res.data.message)
+      })
+      .catch(err => { debugger })
 
   }
 
