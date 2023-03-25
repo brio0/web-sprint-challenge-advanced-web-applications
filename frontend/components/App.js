@@ -96,6 +96,7 @@ export default function App() {
       .then(res => {
         const { article } = res.data
         setArticles(articles.concat(article))
+        setMessage(res.data.message)
       })
       .catch(err => { console.log(err) })
 
