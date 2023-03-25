@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import { NavLink, Routes, Route, useNavigate } from 'react-router-dom'
 import Articles from './Articles'
 import LoginForm from './LoginForm'
@@ -20,8 +20,8 @@ export default function App() {
 
   // ✨ Research `useNavigate` in React Router v.6
   const navigate = useNavigate()
-  const redirectToLogin = () => { /* ✨ implement */ }
-  const redirectToArticles = () => { /* ✨ implement */ }
+  const redirectToLogin = () => { navigate('/'); }
+  const redirectToArticles = () => { navigate('/articles') }
 
   const logout = () => {
     // ✨ implement
@@ -30,7 +30,7 @@ export default function App() {
     // In any case, we should redirect the browser back to the login screen,
     // using the helper above.
     localStorage.removeItem('token');
-    navigate('/');
+    redirectToLogin()
     setMessage('Goodbye!')
 
   }
@@ -47,7 +47,7 @@ export default function App() {
       .then(res => {
         const { token } = res.data
         localStorage.setItem('token', token)
-        navigate('/articles')
+        redirectToArticles()
         setMessage(`Here are your articles, ${username}!`)
       })
       .catch(err => console.log(err))
@@ -64,23 +64,57 @@ export default function App() {
     // If something goes wrong, check the status of the response:
     // if it's a 401 the token might have gone bad, and we should redirect to login.
     // Don't forget to turn off the spinner!
+    setSpinnerOn(true)
+    axiosWithAuth().get(articlesUrl)
+      .then(res => {
+        setArticles(res.data.articles)
+      })
+      .catch(err => { console.log(err) })
+      .finally(setSpinnerOn(false))
+    // axios({
+    //   url: articlesUrl,
+    //   method: 'get',
+    //   headers: {
+    //     Authorization: localStorage.getItem('token')
+    //   },
+    // })
+    //   .then(res => {
+    //     debugger
+    //   })
+    //   .catch(res => { debugger })
+
+
   }
+
 
   const postArticle = article => {
     // ✨ implement
     // The flow is very similar to the `getArticles` function.
     // You'll know what to do! Use log statements or breakpoints
     // to inspect the response from the server.
+    axiosWithAuth().post(articlesUrl, article)
+      .then(res => {
+        const { article } = res.data
+        setArticles(articles.concat(article))
+      })
+      .catch(err => { console.log(err) })
+
   }
 
   const updateArticle = ({ article_id, article }) => {
     // ✨ implement
     // You got this!
+    console.log('hello')
   }
 
   const deleteArticle = article_id => {
     // ✨ implement
+    if (!localStorage.getItem('token')) {
+      return <Navigate to="/" />
+    }
+
   }
+
 
   return (
     // ✨ fix the JSX: `Spinner`, `Message`, `LoginForm`, `ArticleForm` and `Articles` expect props ❗
@@ -98,8 +132,18 @@ export default function App() {
           <Route path="/" element={<LoginForm login={login} />} />
           <Route path="articles" element={
             <>
-              <ArticleForm />
-              <Articles />
+              <ArticleForm
+                getArticles={getArticles}
+                postArticle={postArticle}
+              />
+              <Articles
+                articles={articles}
+                spinnerOn={spinnerOn}
+                updateArticle={updateArticle}
+                deleteArticle={deleteArticle}
+                currentArticleId={currentArticleId}
+                getArticles={getArticles}
+              />
             </>
           } />
         </Routes>

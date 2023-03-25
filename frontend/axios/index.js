@@ -2,10 +2,10 @@
 import axios from 'axios'
 
 export default () => {
-    axios.create({
+    return axios.create({
         headers: {
             Authorization: localStorage.getItem('token')
-        }
+        },
     })
 }
 
