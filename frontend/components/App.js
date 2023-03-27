@@ -102,14 +102,17 @@ export default function App() {
 
   }
 
-  const updateArticle = ({ article_id, article }) => {
+  const updateArticle = (article) => {
     // ✨ implement
     // You got this!
+    const { article_id } = article
     axiosWithAuth().put(`${articlesUrl}/${article_id} `, article)
       .then(res => {
+
         const putArticle = res.data.article;
-        console.log(putArticle)
         setArticles(articles.map(art => (art.article_id === article_id ? putArticle : art)))
+        setMessage(res.data.message)
+        setCurrentArticleId(null)
 
       })
       .catch(err => { console.log(err) })
@@ -130,7 +133,7 @@ export default function App() {
   return (
     // ✨ fix the JSX: `Spinner`, `Message`, `LoginForm`, `ArticleForm` and `Articles` expect props ❗
     <>
-      <Spinner spinnerOn={spinnerOn} />
+      <Spinner on={spinnerOn} />
       <Message message={message} />
       <button id="logout" onClick={logout}>Logout from app</button>
       <div id="wrapper" style={{ opacity: spinnerOn ? "0.25" : "1" }}> {/* <-- do not change this line */}
@@ -154,7 +157,6 @@ export default function App() {
               <Articles
                 articles={articles}
                 spinnerOn={spinnerOn}
-                updateArticle={updateArticle}
                 deleteArticle={deleteArticle}
                 setCurrentArticleId={setCurrentArticleId}
                 getArticles={getArticles}

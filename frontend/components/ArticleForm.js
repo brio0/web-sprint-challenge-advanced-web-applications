@@ -8,7 +8,6 @@ export default function ArticleForm(props) {
   // ✨ where are my props? Destructure them here
   const { postArticle, currentArticle, updateArticle, setCurrentArticleId } = props
 
-  console.log(currentArticle)
 
   useEffect(() => {
     // ✨ implement
@@ -36,7 +35,6 @@ export default function ArticleForm(props) {
 
     if (currentArticle) {
       updateArticle(values)
-      setCurrentArticleId(null)
     } else {
       postArticle(values)
     }
@@ -73,13 +71,18 @@ export default function ArticleForm(props) {
         <option value="React">React</option>
         <option value="Node">Node</option>
       </select>
-      <div className="button-group">
-        <button disabled={isDisabled()} id="submitArticle">Submit</button>
-        <button onClick={() => {
-          setValues(initialFormValues)
-          setCurrentArticleId(null)
-        }}>Cancel edit</button>
-      </div>
+      {currentArticle ?
+        <div className="button-group">
+          <button disabled={isDisabled()} id="submitArticle">Submit</button>
+          <button onClick={() => {
+            setValues(initialFormValues)
+            setCurrentArticleId(null)
+          }}>Cancel edit</button>
+        </div> :
+        <div className="button-group">
+          <button disabled={isDisabled()} id="submitArticle">Submit</button>
+        </div>
+      }
     </form>
   )
 }

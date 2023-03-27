@@ -5,7 +5,6 @@ import PT from 'prop-types'
 export default function Articles(props) {
   // ✨ where are my props? Destructure them here
   const { articles, spinnerOn, deleteArticle, getArticles, setCurrentArticleId, currentArticleId } = props
-  console.log(props)
   if (!localStorage.getItem('token')) {
     return <Navigate to="/" />
   }
