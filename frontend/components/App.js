@@ -15,7 +15,7 @@ export default function App() {
   // ✨ MVP can be achieved with these states
   const [message, setMessage] = useState('')
   const [articles, setArticles] = useState([])
-  const [currentArticleId, setCurrentArticleId] = useState()
+  const [currentArticleId, setCurrentArticleId] = useState(null)
   const [spinnerOn, setSpinnerOn] = useState(false)
 
   // ✨ Research `useNavigate` in React Router v.6
@@ -105,7 +105,14 @@ export default function App() {
   const updateArticle = ({ article_id, article }) => {
     // ✨ implement
     // You got this!
-    console.log('hello')
+    axiosWithAuth().put(`${articlesUrl}/${article_id} `, article)
+      .then(res => {
+        const putArticle = res.data.article;
+        console.log(putArticle)
+        setArticles(articles.map(art => (art.article_id === article_id ? putArticle : art)))
+
+      })
+      .catch(err => { console.log(err) })
   }
 
   const deleteArticle = article_id => {
@@ -139,13 +146,17 @@ export default function App() {
               <ArticleForm
                 getArticles={getArticles}
                 postArticle={postArticle}
+                currentArticleId={currentArticleId}
+                setCurrentArticleId={setCurrentArticleId}
+                currentArticle={articles.find(art => (art.article_id === currentArticleId))}
+                updateArticle={updateArticle}
               />
               <Articles
                 articles={articles}
                 spinnerOn={spinnerOn}
                 updateArticle={updateArticle}
                 deleteArticle={deleteArticle}
-                currentArticleId={currentArticleId}
+                setCurrentArticleId={setCurrentArticleId}
                 getArticles={getArticles}
               />
             </>

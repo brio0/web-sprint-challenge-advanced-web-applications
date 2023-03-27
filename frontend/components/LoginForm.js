@@ -26,6 +26,7 @@ export default function LoginForm(props) {
     // Trimmed username must be >= 3, and
     // trimmed password must be >= 8 for
     // the button to become enabled
+
   }
 
   return (
@@ -45,7 +46,7 @@ export default function LoginForm(props) {
         placeholder="Enter password"
         id="password"
       />
-      <button disabled={isDisabled()} id="submitCredentials">Submit credentials</button>
+      <button disabled={() => isDisabled()} id="submitCredentials">Submit credentials</button>
     </form>
   )
 }

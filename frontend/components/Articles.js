@@ -4,7 +4,7 @@ import PT from 'prop-types'
 
 export default function Articles(props) {
   // ✨ where are my props? Destructure them here
-  const { articles, spinnerOn, updateArticle, deleteArticle, getArticles, currentArticleId } = props
+  const { articles, spinnerOn, deleteArticle, getArticles, setCurrentArticleId, currentArticleId } = props
   console.log(props)
   if (!localStorage.getItem('token')) {
     return <Navigate to="/" />
@@ -36,7 +36,7 @@ export default function Articles(props) {
                   <p>Topic: {art.topic}</p>
                 </div>
                 <div>
-                  <button disabled={true} onClick={updateArticle}>Edit</button>
+                  <button onClick={() => { setCurrentArticleId(art.article_id) }}>Edit</button>
                   <button onClick={() => deleteArticle(art.article_id)}>Delete</button>
                 </div>
               </div>
