@@ -44,6 +44,12 @@ export default function ArticleForm(props) {
   const isDisabled = () => {
     // ✨ implement
     // Make sure the inputs have some values
+    if (values.title.trim().length > 0 && values.text.trim().length > 0 && values.topic.trim().length > 0) {
+      return false
+    } else {
+      return true
+    }
+
   }
 
   return (
@@ -71,18 +77,15 @@ export default function ArticleForm(props) {
         <option value="React">React</option>
         <option value="Node">Node</option>
       </select>
-      {currentArticle ?
-        <div className="button-group">
-          <button disabled={isDisabled()} id="submitArticle">Submit</button>
-          <button onClick={() => {
+      <div className="button-group">
+        <button disabled={isDisabled()} id="submitArticle">Submit</button>
+        {
+          currentArticle ? <button onClick={() => {
             setValues(initialFormValues)
             setCurrentArticleId(null)
-          }}>Cancel edit</button>
-        </div> :
-        <div className="button-group">
-          <button disabled={isDisabled()} id="submitArticle">Submit</button>
-        </div>
-      }
+          }}>Cancel edit</button> : null
+        }
+      </div>
     </form>
   )
 }
